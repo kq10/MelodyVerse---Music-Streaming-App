@@ -1,0 +1,133 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <title>{% block title %}MelodyVerse{% endblock %}</title> 
+    <!-- Bootstrap CSS --> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="path/to/custom/styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-s5A6ODq8dGhIGzDCPvx0AiJS3DsdW4mv6N/5eXmDZBfKL8A/6cQJyMbCrJxd+d2lP8dF0F5AwYl6Jnh7Y4CtZA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.17.0/font/bootstrap-icons.css">
+  <!-- End Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.17.0/font/bootstrap-icons.css">
+<!-- End Bootstrap Icons CSS -->
+
+    <style> 
+        /* Custom styles for the navbar */ 
+        .navbar-custom { 
+            background-color: #343a40; /* Navbar background color */ 
+        } 
+        .navbar-custom .navbar-brand { 
+            color: #ffffff; /* Navbar brand text color */ 
+        } 
+        .navbar-custom .nav-link { 
+            color: #ffffff; /* Navbar links text color */ 
+        } 
+        .navbar-custom .nav-link:hover { 
+            color: #f8f9fa; /* Navbar links text color on hover */ 
+        } 
+        
+        /* Add more custom styles as needed */ 
+    </style> 
+</head> 
+ 
+<body> 
+<!-- Navbar --> 
+{% if current_user.is_authenticated %} 
+  <nav class="navbar navbar-expand-lg navbar-light bg-light"> 
+      <a class="navbar-brand" href="{{ url_for('home') }}">MelodyVerse</a> 
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> 
+        <span class="navbar-toggler-icon"></span> 
+      </button> 
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+        <ul class="navbar-nav mr-auto"> 
+          <li class="nav-item active"> 
+            <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a> 
+          </li> 
+          <!-- Other navbar links here --> 
+        </ul>
+{% else %} 
+  <nav class="navbar navbar-expand-lg navbar-light bg-light"> 
+    <a class="navbar-brand" href="{{ url_for('login') }}">MelodyVerse</a> 
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> 
+      <span class="navbar-toggler-icon"></span> 
+    </button> 
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+      <ul class="navbar-nav mr-auto"> 
+        <li class="nav-item active"> 
+          <a class="nav-link" href="{{ url_for('login') }}">Home <span class="sr-only">(current)</span></a> 
+        </li> 
+        <!-- Other navbar links here --> 
+      </ul>
+{% endif %}
+
+      {% if current_user.is_authenticated %} 
+      {% if current_user.is_creator %}
+            <form class="form-inline my-2 my-lg-0" action="/creator_dashboard" method="get">
+                <button style="margin:5px;" class="btn btn-outline-info my-2 my-sm-0" type="submit">Creator Dashboard</button>
+            </form>
+      {% endif %}
+      {% if not current_user.is_creator %} 
+      {% if current_user.is_admin %}
+      <form class="form-inline my-2 my-lg-0" action="/admin" method="get"> 
+    
+        <button style="margin:5px;"  class="btn btn-outline-dark my-2 my-sm-0" type="submit">Admin Dashboard</button> 
+      </form> 
+      {% endif %}
+      {% if not current_user.is_admin %}
+      <form class="form-inline my-2 my-lg-0" action="/register_creator" method="get"> 
+    
+        <button style="margin:5px;"  class="btn btn-outline-dark my-2 my-sm-0" type="submit">Register as a Creator</button> 
+      </form> 
+      {% endif %}
+      {% endif %}
+        <form class="form-inline my-2 my-lg-0" action="/account" method="get"> 
+    
+          <button style="margin:5px;"  class="btn btn-outline-primary my-2 my-sm-0" type="submit">User Profile</button> 
+        </form> 
+      
+        <form class="form-inline my-2 my-lg-0" action="/logout" method="get"> 
+  
+          <button style="margin:5px;" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button> 
+        </form> 
+      {% else %} 
+        <ul class="navbar-nav"> 
+          <li class="nav-item"> 
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a> 
+          </li> 
+          <li class="nav-item"> 
+            <a class="nav-link" href="{{ url_for('register') }}">Register</a> 
+          </li> 
+        </ul> 
+      {% endif %} 
+    
+    </div> 
+  </nav> 
+   
+
+
+ 
+<!-- Content Section --> 
+<div class="container mt-4"> 
+    {% block content %} 
+    <!-- Default content or placeholders for extended templates --> 
+    {% endblock %} 
+</div> 
+ 
+<!-- Footer --> 
+
+ 
+<!-- Bootstrap JS and other scripts --> 
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+ 
+</body> 
+ 
+</html>

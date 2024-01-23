@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>{{ playlist.name }}</h1>
+
+      <div class="d-flex">
+        <!-- Button to delete playlist -->
+        <form method="POST" action="{{ url_for('delete_playlist', playlist_id=playlist.playlist_id) }}" class="mr-2">
+          <button type="submit" class="btn btn-danger">Delete Playlist</button>
+        </form>
+
+        <!-- Edit Playlist Name Button -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editPlaylistModal">Edit Playlist Name</button>
+
+        <!-- Add Songs Button -->
+        <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#addSongsModal">Add Songs to Playlist</button>
+      </div>
+    </div>
+
+    <div class="mb-4">
+        <h3>Songs in Playlist</h3>
+        <div class="row">
+          {% for song in playlist_songs %}
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ song.song_name }}</h5>
+                  <p class="card-text">Artist: {{ song.creator }}</p>
+                  <audio controls class="float-right">
+                    <source src="{{ url_for('static', filename='audios/' + song.song_filepath) }}" type="audio/mp3">
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    <!-- Edit Playlist Name Modal -->
+    <div class="modal fade" id="editPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="editPlaylistModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editPlaylistModalLabel">Edit Playlist Name</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{{ url_for('edit_playlist', playlist_id=playlist.playlist_id) }}">
+              {{ edit_form.hidden_tag() }}
+              <div class="form-group">
+                <label for="name">New Playlist Name:</label>
+                <input type="text" name="name" class="form-control" value="{{ playlist.name }}">
+              </div>
+              <button type="submit" class="btn btn-success">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <!-- Add Songs Modal -->
+    <div class="modal fade" id="addSongsModal" tabindex="-1" role="dialog" aria-labelledby="addSongsModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSongsModalLabel">Add Songs to Playlist</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{{ url_for('add_songs_to_playlist', playlist_id=playlist.playlist_id) }}">
+              {{ form.hidden_tag() }}
+              <div class="form-group">
+                {{ form.song_ids.label }}
+                {{ form.song_ids(class="form-control", multiple="multiple") }}
+            </div>
+              <button type="submit" class="btn btn-success">Add to Playlist</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

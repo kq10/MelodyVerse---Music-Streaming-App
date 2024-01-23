@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="content-section">
+        <style>
+            @keyframes celebrate {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+
+            .celebrate {
+                animation: celebrate 1s ease-in-out;
+            }
+        </style>
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Register as Creator</legend>
+                <div class="form-group">
+                    {{ form.creator_name.label(class="form-control-label") }}
+                    {% if form.creator_name.errors %}
+                        {{ form.creator_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.creator_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.creator_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.band_name.label(class="form-control-label") }}
+                    {% if form.band_name.errors %}
+                        {{ form.band_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.band_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.band_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            {% if form.submit.data %}
+                <p class="text-success celebrate">Registered as Creator successfully!</p>
+            {% endif %}
+        </form>
+    </div>
+{% endblock content %}

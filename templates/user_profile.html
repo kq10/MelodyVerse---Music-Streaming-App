@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">{{ current_user.username }}'s Playlists</h1>
+
+    {% if playlists %}
+      <div class="row">
+        {% for playlist in playlists %}
+          <div class="col-md-12 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">{{ playlist.name }}</h5>
+                  <a href="{{ url_for('playlist', playlist_id=playlist.playlist_id) }}" class="btn btn-primary">View Playlist</a>
+                </div>
+                {% if playlist.description %}
+                  <p class="card-text">Description: {{ playlist.description }}</p>
+                {% else %}
+                  <p class="card-text">No description added.</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info" role="alert">
+        No playlists available. Create your first playlist now!
+      </div>
+    {% endif %}
+  </div>
+{% endblock content %}

@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="border-bottom mb-4 pb-2-4">Admin Dashboard</h1>
+    <h2>Statistics</h2>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">{{ total_users }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Creators</h5>
+                    <p class="card-text">{{ total_creators }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Albums</h5>
+                    <p class="card-text">{{ total_albums }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="border-bottom mb-4 pb-2">All Users</h2>
+    <div class="scrollable-container" style="overflow-x: auto; white-space: nowrap; display: flex;">
+        {% for user in users %}
+            {% if user.username != 'admin' %}
+                <div class="col-md-4 mb-4" style="flex: 0 0 auto;">
+                    <div class="card" style="max-width: 300px;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.username }}</h5>
+                            <p class="card-text">Email: {{ user.email }}</p>
+                            <a href="{{ url_for('admin_delete_user', user_id=user.user_id) }}" class="btn btn-danger">Delete User</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+    <br>
+
+    <h2 class="border-bottom mb-4 pb-2">All Creators</h2>
+    <div class="scrollable-container" style="overflow-x: auto; white-space: nowrap; display: flex;">
+        {% for creator in creators %}
+            <div class="col-md-4 mb-4" style="flex: 0 0 auto;">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ creator.creator_name }}</h5>
+                        <p class="card-text">Email: {{ creator.email }}</p>
+                        <p class="card-text">Is Blacklisted: {{ creator.is_blacklisted }}</p>
+                        <div class="btn-group" role="group" aria-label="Creator Actions">
+                            <a href="{{ url_for('admin_blacklist_creator', user_id=creator.user_id) }}" class="btn btn-danger">Blacklist</a>
+                            <a href="{{ url_for('admin_whitelist_creator', user_id=creator.user_id) }}" class="btn btn-success">Whitelist</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <br>
+
+    <h2 class="border-bottom mb-4 pb-2">All Songs</h2>
+    <div class="scrollable-container" style="overflow-x: auto; white-space: nowrap; display: flex;">
+        {% for song in songs %}
+            <div class="col-md-4 mb-4" style="flex: 0 0 auto;">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ song.song_name }}</h5>
+                        <p class="card-text">Creator: {{ song.creator }}</p>
+                        <audio controls>
+                            <source src="{{ url_for('static', filename='audios/' + song.song_filepath) }}" type="audio/mp3">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ url_for('admin_delete_song', song_id=song.song_id) }}" class="btn btn-danger">Delete Song</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <br>
+
+    <h2 class="border-bottom mb-4 pb-2">All Albums</h2>
+    <div class="scrollable-container" style="overflow-x: auto; white-space: nowrap; display: flex;">
+        {% for album in albums %}
+            <div class="col-md-4 mb-4" style="flex: 0 0 auto;">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ album.album_name }}</h5>
+                        {% if album.songs|length > 0 %}
+                            <p class="card-text">Number of Songs: {{ album.songs|length }}</p>
+                        {% else %}
+                            <p class="card-text">No songs in album</p>
+                        {% endif %}
+                        <p class="card-text">Creator: {{ album.user.creator_name }}</p>
+                        <a href="{{ url_for('admin_album', album_id=album.album_id) }}" class="btn btn-primary">View Album</a>
+                        <a href="{{ url_for('admin_delete_album', album_id=album.album_id) }}" class="btn btn-danger">Delete Album</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
